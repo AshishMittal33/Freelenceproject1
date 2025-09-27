@@ -3,12 +3,22 @@ using UnityEngine;
 public class ARModelInteraction : MonoBehaviour
 {
     private bool isSelected = false;
-
+    private ARModelInfoHolder infoHolder;
+    private void Awake()
+    {
+        infoHolder = GetComponent<ARModelInfoHolder>();
+    }
     // Jab object select ho jaaye to call karna
     public void SetSelected(bool selected)
     {
         isSelected = selected;
+
+        if (selected && infoHolder != null)
+        {
+            ARUIManager.Instance.ShowInfoPanel(infoHolder.objectInfo);
+        }
     }
+
 
     void Update()
     {

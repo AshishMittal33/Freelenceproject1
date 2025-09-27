@@ -2003,6 +2003,7 @@ GameObject:
   - component: {fileID: 2620454734499660912}
   - component: {fileID: 3039092179990475192}
   - component: {fileID: 697473362482474879}
+  - component: {fileID: 2039427424093087961}
   m_Layer: 0
   m_Name: girl
   m_TagString: Untagged
@@ -2062,7 +2063,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6202158365608685681}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 03bdc7eedd03fa3429b31060e6afd8ab, type: 3}
   m_Name: 
@@ -2090,6 +2091,19 @@ CapsuleCollider:
   m_Height: 1.8262703
   m_Direction: 1
   m_Center: {x: 0, y: 0.84277856, z: 0.02}
+--- !u!114 &2039427424093087961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6202158365608685681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2d5976e47e472847b0082872a288123, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectInfo: {fileID: 11400000, guid: ee69f74cbec60d64a9d8a443da88e8a7, type: 2}
 --- !u!1 &6259355222400625098
 GameObject:
   m_ObjectHideFlags: 0
