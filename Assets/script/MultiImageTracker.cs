@@ -25,13 +25,14 @@ public class MultiImageTrackerStable : MonoBehaviour
             // Instantiate prefab as child of empty
             var prefabInstance = Instantiate(prefab, Vector3.zero, prefab.transform.localRotation, emptyParent.transform);
             prefabInstance.transform.localPosition = Vector3.zero;
-            prefabInstance.transform.localRotation = Quaternion.identity; // Nullify inner prefab rotation, handled by parent
+            prefabInstance.transform.localRotation = Quaternion.identity; // nullify inner prefab rotation
             prefabInstance.SetActive(true);
 
             spawnedParents[prefab.name] = emptyParent;
             spawnedPrefabs[prefab.name] = prefabInstance;
         }
     }
+
     void Update()
     {
         if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began)
@@ -49,7 +50,6 @@ public class MultiImageTrackerStable : MonoBehaviour
             }
         }
     }
-
 
     private void OnEnable()
     {
@@ -93,7 +93,6 @@ public class MultiImageTrackerStable : MonoBehaviour
         parentObj.transform.localRotation = Quaternion.identity;
     }
 
-
     private void UpdateObjectState(ARTrackedImage trackedImage)
     {
         string imageName = trackedImage.referenceImage.name;
@@ -110,7 +109,7 @@ public class MultiImageTrackerStable : MonoBehaviour
         if (!parentObj.activeSelf)
             parentObj.SetActive(true);
 
-        // Optional: Smoothing! (prevents jitter)
+        // Smoothing (reduces jitter)
         Vector3 targetPos = Vector3.zero;
         Quaternion targetRot = Quaternion.identity;
         parentObj.transform.localPosition = Vector3.Lerp(parentObj.transform.localPosition, targetPos, 0.5f);
@@ -126,11 +125,9 @@ public class MultiImageTrackerStable : MonoBehaviour
             if (currentlyActiveImage == imageName)
                 currentlyActiveImage = null;
 
-            // Hide UI when model hidden
+            // Optional ARUIManager call (only if you are using it)
             if (ARUIManager.Instance != null)
                 ARUIManager.Instance.HideAllPanels();
         }
     }
-
-
 }
