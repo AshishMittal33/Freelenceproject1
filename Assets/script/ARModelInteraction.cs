@@ -4,21 +4,41 @@ public class ARModelInteraction : MonoBehaviour
 {
     private bool isSelected = false;
     private ARModelInfoHolder infoHolder;
+
+    [Header("Highlight Object")]
+    [SerializeField] private GameObject highlightObject; // Drag your cube child here
+
     private void Awake()
     {
         infoHolder = GetComponent<ARModelInfoHolder>();
+
+        // If highlight object is not assigned, try to find it automatically
+        if (highlightObject == null)
+        {
+            highlightObject = transform.Find("highlight")?.gameObject;
+            // OR find by tag
+            // highlightObject = GameObject.FindGameObjectWithTag("Highlight");
+        }
+
+        if (highlightObject != null)
+            highlightObject.SetActive(false);
+        else
+            Debug.LogError("Highlight Object not found on: " + gameObject.name);
     }
-    // Jab object select ho jaaye to call karna
+
     public void SetSelected(bool selected)
     {
         isSelected = selected;
+
+        // Toggle the highlight object
+        if (highlightObject != null)
+            highlightObject.SetActive(selected);
 
         if (selected && infoHolder != null)
         {
             ARUIManager.Instance.ShowInfoPanel(infoHolder.objectInfo);
         }
     }
-
 
     void Update()
     {
