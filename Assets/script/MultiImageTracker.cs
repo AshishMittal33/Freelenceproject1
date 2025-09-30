@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -37,16 +38,33 @@ public class MultiImageTrackerStable : MonoBehaviour
     {
         if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
+            // Ignore if tap is on UI
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+                return;
+
             Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
 
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                foreach (var obj in FindObjectsOfType<ARModelInteraction>())
-                    obj.SetSelected(false);
-
                 ARModelInteraction interact = hit.transform.GetComponentInParent<ARModelInteraction>();
                 if (interact != null)
-                    interact.SetSelected(true);
+                {
+                    // Toggle if same model tapped again
+                    if (interact.IsSelected)
+                    {
+                        interact.SetSelected(false);
+                        if (ARUIManager.Instance != null)
+                            ARUIManager.Instance.HideAllPanels();
+                    }
+                    else
+                    {
+                        // Deselect all others
+                        foreach (var obj in FindObjectsOfType<ARModelInteraction>())
+                            obj.SetSelected(false);
+
+                        interact.SetSelected(true);
+                    }
+                }
             }
         }
     }
@@ -103,6 +121,12 @@ public class MultiImageTrackerStable : MonoBehaviour
         if (trackedImage.trackingState != TrackingState.Tracking)
         {
             parentObj.SetActive(false);
+            // Also hide panels when tracking is lost
+            if (currentlyActiveImage == imageName)
+            {
+                HideAllPanelsAndDeselect();
+                currentlyActiveImage = null;
+            }
             return;
         }
 
@@ -123,11 +147,22 @@ public class MultiImageTrackerStable : MonoBehaviour
             spawnedParents[imageName].SetActive(false);
 
             if (currentlyActiveImage == imageName)
+            {
                 currentlyActiveImage = null;
-
-            // Optional ARUIManager call (only if you are using it)
-            if (ARUIManager.Instance != null)
-                ARUIManager.Instance.HideAllPanels();
+                HideAllPanelsAndDeselect();
+            }
         }
+    }
+
+    // New method to hide panels and deselect all models
+    private void HideAllPanelsAndDeselect()
+    {
+        // Deselect all models
+        foreach (var obj in FindObjectsOfType<ARModelInteraction>())
+            obj.SetSelected(false);
+
+        // Hide UI panels
+        if (ARUIManager.Instance != null)
+            ARUIManager.Instance.HideAllPanels();
     }
 }

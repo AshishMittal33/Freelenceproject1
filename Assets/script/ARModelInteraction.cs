@@ -7,6 +7,7 @@ public class ARModelInteraction : MonoBehaviour
 
     [Header("Highlight Object")]
     [SerializeField] private GameObject highlightObject; // Drag your cube child here
+    public bool IsSelected => isSelected;
 
     private void Awake()
     {
