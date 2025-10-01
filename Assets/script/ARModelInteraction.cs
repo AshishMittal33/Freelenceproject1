@@ -1,10 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ARModelInteraction : MonoBehaviour
 {
     private bool isSelected = false;
     private ARModelInfoHolder infoHolder;
-
+    private ARLabelManager labelManager;   // 👈 Add this
     [Header("Highlight Object")]
     [SerializeField] private GameObject highlightObject; // Drag your cube child here
     public bool IsSelected => isSelected;
@@ -12,7 +12,7 @@ public class ARModelInteraction : MonoBehaviour
     private void Awake()
     {
         infoHolder = GetComponent<ARModelInfoHolder>();
-
+        labelManager = GetComponent<ARLabelManager>(); // 👈 Prefab ke andar hoga
         // If highlight object is not assigned, try to find it automatically
         if (highlightObject == null)
         {
@@ -38,6 +38,7 @@ public class ARModelInteraction : MonoBehaviour
         if (selected && infoHolder != null)
         {
             ARUIManager.Instance.ShowInfoPanel(infoHolder.objectInfo);
+            ARUIManager.Instance.SetActiveLabelManager(labelManager);
         }
     }
 

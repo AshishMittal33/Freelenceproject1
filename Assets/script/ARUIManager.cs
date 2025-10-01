@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -19,7 +19,7 @@ public class ARUIManager : MonoBehaviour
     public Button exitQuizButton;
 
     private QuizDataSO currentQuiz;
-
+    private ARLabelManager activeLabelManager; // 👈 store current
     void Awake()
     {
         Instance = this;
@@ -70,7 +70,16 @@ public class ARUIManager : MonoBehaviour
         // Hide all UI after 3 seconds and return to AR
         Invoke(nameof(HideAllPanels), 3f);
     }
+    public void SetActiveLabelManager(ARLabelManager lm)
+    {
+        activeLabelManager = lm;
+    }
 
+    public void ToggleLabels()
+    {
+        if (activeLabelManager != null)
+            activeLabelManager.ToggleLabels();
+    }
     public void HideAllPanels()
     {
         infoPanel.SetActive(false);
